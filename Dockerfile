@@ -8,8 +8,7 @@ RUN apt-get update && \
 VOLUME ["/backup"]
 VOLUME ["/_failed"]
 
-ADD backup.sh /backup.sh
 ADD run.sh /run.sh
 RUN chmod +x /run.sh
 
-CMD ["/run.sh"]
+CMD ["/run.sh"] 
