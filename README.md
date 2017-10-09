@@ -13,8 +13,8 @@ You need to be logged in your Docker Hub account locally
 
 ```
 docker build ./
-docker tag [IMAGE_ID] [YOUR_DOCKERHUB_REPO]:[TAG_NAME]
-docker push [YOUR_DOCKERHUB_REPO]
+docker tag [IMAGE_ID] rspective/postgres_backup:[TAG_NAME]
+docker push rspective/postgres_backup
 
 ```
 
@@ -24,7 +24,7 @@ docker push [YOUR_DOCKERHUB_REPO]
 
 ```yaml
 service_name:
-    image: [YOUR_DOCKERHUB_REPO]
+    image: rspective/postgres_backup:[TAG_NAME]
     container_name: [CUSTOM_NAME]
     links:
       - pg # link your DB from other service
