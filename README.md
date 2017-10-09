@@ -19,6 +19,9 @@ docker push [YOUR_DOCKERHUB_REPO]
 ```
 
 ## Using image
+
+*All variables are required, there is no default values*
+
 ```yaml
 service_name:
     image: [YOUR_DOCKERHUB_REPO]}
