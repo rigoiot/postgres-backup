@@ -7,7 +7,7 @@
 
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 
-BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} > /backup/dump_\${BACKUP_NAME_CORE}.sql 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+BACKUP_CMD="pg_dump -c -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} > /backup/dump_\${BACKUP_NAME_CORE}.sql 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
 
 echo "=> Creating backup script"
 rm -f /backup.sh
