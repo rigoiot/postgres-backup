@@ -15,7 +15,7 @@ cat <<EOF >> /backup.sh
 #!/bin/bash
 MAX_BACKUPS=${MAX_BACKUPS}
 SLACK=${SLACK_WEBHOOK}
-BACKUP_NAME_CORE=\$(date +%d-%m-%Y_%H_%M_%S)
+BACKUP_NAME_CORE=\$(date +%Y-%m-%d_%H_%M_%S)
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 echo "=> Backup started: \${BACKUP_NAME_CORE}"
 if ${BACKUP_CMD} ;then
