@@ -19,14 +19,13 @@ while getopts ":d" opt; do
   esac
 done
 
+BACKUP_BASE="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB}"
+ERR_REDIRECT="2> /_failed/failed_${BACKUP_NAME_CORE}.log"
+
 if [[ -n ${DIR_MODE} ]]; then
-  if [[ -n ${CPUS} ]]; then
-    BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -Fd ${POSTGRES_DB} -j ${CPUS} -f /backup/dump_\${BACKUP_NAME_CORE} 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
-  else
-   BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -Fd ${POSTGRES_DB} -f /backup/dump_\${BACKUP_NAME_CORE} 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
-  fi
+  BACKUP_CMD="$BACKUP_BASE -Fd -f /backup/dump_\${BACKUP_NAME_CORE} $ERR_REDIRECT"
 else
-  BACKUP_CMD="pg_dump -c -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} > /backup/dump_\${BACKUP_NAME_CORE}.sql 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+  BACKUP_CMD="$BACKUP_BASE -c > /backup/dump_\${BACKUP_NAME_CORE}.sql $ERR_REDIRECT"
 fi
 
 if ! [ -d /_failed ]; then
