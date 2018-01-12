@@ -7,26 +7,7 @@
 
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 
-while getopts ":d" opt; do
-  case $opt in
-    d)
-      echo "Directory mode ( compression by default )" >&2
-      DIR_MODE=true
-      ;;
-    *)
-      echo "Plain text format ( no compresion ) saved into .sql file" >&2
-      ;;
-  esac
-done
-
-BACKUP_BASE="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB}"
-ERR_REDIRECT="2> /_failed/failed_${BACKUP_NAME_CORE}.log"
-
-if [[ -n ${DIR_MODE} ]]; then
-  BACKUP_CMD="$BACKUP_BASE -Fd -f /backup/dump_\${BACKUP_NAME_CORE} $ERR_REDIRECT"
-else
-  BACKUP_CMD="$BACKUP_BASE -c > /backup/dump_\${BACKUP_NAME_CORE}.sql $ERR_REDIRECT"
-fi
+BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} -Fd -f /backup/dump_\${BACKUP_NAME_CORE} 2> /_failed/failed_${BACKUP_NAME_CORE}.log"
 
 if ! [ -d /_failed ]; then
   mkdir /_failed
