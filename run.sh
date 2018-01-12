@@ -7,7 +7,34 @@
 
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 
-BACKUP_CMD="pg_dump -c -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} > /backup/dump_\${BACKUP_NAME_CORE}.sql 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+while getopts ":d" opt; do
+  case $opt in
+    d)
+      echo "Directory mode ( compression by default )" >&2
+      DIR_MODE=true
+      ;;
+    *)
+      echo "Plain text format ( no compresion ) saved into .sql file" >&2
+      ;;
+  esac
+done
+
+if [[ -n ${DIR_MODE} ]]; then
+  if [[ -n ${CPUS} ]]; then
+    BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -Fd ${POSTGRES_DB} -j ${CPUS} -f /backup/dump_\${BACKUP_NAME_CORE} 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+  else
+   BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -Fd ${POSTGRES_DB} -f /backup/dump_\${BACKUP_NAME_CORE} 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+  fi
+else
+  BACKUP_CMD="pg_dump -c -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} > /backup/dump_\${BACKUP_NAME_CORE}.sql 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
+fi
+
+if ! [ -d /_failed ]; then
+  mkdir /_failed
+fi
+if ! [ -d /backup ]; then
+  mkdir /backup
+fi
 
 echo "=> Creating backup script"
 rm -f /backup.sh
