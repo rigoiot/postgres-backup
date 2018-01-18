@@ -22,20 +22,20 @@ cat <<EOF >> /backup.sh
 #!/bin/bash
 MAX_BACKUPS=${MAX_BACKUPS}
 SLACK=${SLACK_WEBHOOK}
-BACKUP_NAME_CORE=\$(date +%d-%m-%Y_%H_%M_%S)
+BACKUP_NAME_CORE=\$(date +%Y-%m-%d_%H_%M_%S)
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 echo "=> Backup started: \${BACKUP_NAME_CORE}"
 if ${BACKUP_CMD} ;then
     echo "   Backup succeeded"
     rm -rf /_failed/failed_\${BACKUP_NAME_CORE}.log
     if [ -n "\${SLACK}" ]; then
-      curl -s -X POST --data-urlencode "payload={\"username\": \"Backup BOT\", \"text\": \"*HA MAINTENANCE* - database backup succeded: file=*dump_\${BACKUP_NAME_CORE}.sql*\"}" \${SLACK}
+      curl -s -X POST --data-urlencode "payload={\"username\": \"Backup BOT\", \"text\": \"*MAINTENANCE* - database backup succeded: file=*dump_\${BACKUP_NAME_CORE}.sql*\"}" \${SLACK}
     fi
 else
     echo "   Backup failed"
     rm -rf /backup/\dump_${BACKUP_NAME_CORE}.sql
     if [ -n "\${SLACK}" ]; then
-      curl -s -X POST --data-urlencode "payload={\"username\": \"Backup BOT\", \"text\": \"*HA MAINTENANCE* - database backup failed\"}" \${SLACK}
+      curl -s -X POST --data-urlencode "payload={\"username\": \"Backup BOT\", \"text\": \"*MAINTENANCE* - database backup failed\"}" \${SLACK}
     fi
 fi
 if [ -n "\${MAX_BACKUPS}" ]; then
