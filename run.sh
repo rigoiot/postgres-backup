@@ -26,7 +26,7 @@ BACKUP_NAME_CORE=\$(date +%Y-%m-%d_%H_%M_%S)
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 echo "=> Backup started: \${BACKUP_NAME_CORE}"
 if ${BACKUP_CMD} ;then
-    gzip "/backup/dump_${BACKUP_NAME_CORE}.tar"
+    gzip "/backup/dump_\${BACKUP_NAME_CORE}.tar"
     echo "   Backup succeeded"
     rm -rf /_failed/failed_\${BACKUP_NAME_CORE}.log
     if [ -n "\${SLACK}" ]; then
