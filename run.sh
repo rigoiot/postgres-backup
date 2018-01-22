@@ -7,7 +7,7 @@
 
 export PGPASSWORD="${POSTGRES_PASSWORD}"
 
-BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} -F tar -f /backup/dump_\${BACKUP_NAME_CORE}.tar 2> /_failed/failed_${BACKUP_NAME_CORE}.log"
+BACKUP_CMD="pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} ${POSTGRES_DB} -F tar -f /backup/dump_\${BACKUP_NAME_CORE}.tar 2> /_failed/failed_\${BACKUP_NAME_CORE}.log"
 
 if ! [ -d /_failed ]; then
   mkdir /_failed
