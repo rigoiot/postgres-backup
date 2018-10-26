@@ -42,6 +42,41 @@ service_name:
       - ./database/failed:/_failed # failure logs
 ```
 
+## Enable WAL
+
+Update `postgresql.conf` 
+
+
+```bash
+# The WAL level should be hot_standby or logical.
+wal_level = logical
+
+# Allow up to 8 standbys and backup processes to connect at a time.
+max_wal_senders = 8
+
+# Retain 1GB worth of WAL files. Adjust this depending on your transaction rate.
+max_wal_size = 1GB
+```
+
+Create a user. This streaming replication client in the slave node will connect to the master as this user.
+```bash
+/ # su - postgres
+879a020a7544:~$ psql
+psql (9.6.3)
+Type "help" for help.
+
+postgres=# create user repluser replication;
+CREATE ROLE
+postgres=# \q
+```
+
+In `pg_hba.conf`, allow this user to connect for replication.
+
+```bash
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    replication     repluser        x.x.x.x/32              trust
+```
+
 ### Helpful links
 * https://crontab.guru/
 * https://api.slack.com/incoming-webhooks
