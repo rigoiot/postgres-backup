@@ -61,4 +61,8 @@ typings/
 
 
 /backup/
+/wal_backup/
+crontab.conf
+wal_backup.sh
+backup.sh
 /.idea/
